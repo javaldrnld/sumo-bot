@@ -12,6 +12,7 @@ public:
   void goBackward();
   void charge();
   void stop();
+  void search();
 
 private:
   AF_DCMotor leftMotor;

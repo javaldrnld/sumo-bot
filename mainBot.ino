@@ -4,14 +4,21 @@
 // DEFINE CONSTANTS
 #define TRIGGER_PIN 19
 #define ECHO_PIN 18
+#define MAX_DISTANT 400 // Can change to 200cm
+
+#define IR_SENSOR_LEFT_PIN
+#define
+
+// Global Variable 
+
 
 // Initialize Objects
-NewPing sonar(12, 11, 200); //
-MotorControl motorWheel(4, 3);
+NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANT); 
+MotorControl motorWheel(4, 3); // Left Motor Pin 4, Right Motor Pin 3
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
+  Serial.begin(115200);
 
 }
 

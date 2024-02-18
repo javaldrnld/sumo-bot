@@ -44,3 +44,7 @@ void MotorControl::stop() {
     leftMotor.run(RELEASE);
     rightMotor.run(RELEASE);
 }
+
+void MotorControl::search(int) {
+
+}
