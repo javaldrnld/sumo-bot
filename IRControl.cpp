@@ -16,13 +16,13 @@ void checkEdge(int leftIRSensor, int rightIRSensor, int distance) {
   }
 }
 
-void handleBothIRHIGH(int distance) {
-  Serial.println(distance);
-  if (distance > 50) {
+// void handleBothIRHIGH(int distance) {
+//   Serial.println(distance);
+//   if (distance > 50) {
 
-    motorWheel.goForward();
-  } else {
-    motorWheel.stop();
-    motorWheel.search();
-  }
-}
+//     motorWheel.goForward();
+//   } else {
+//     motorWheel.stop();
+//     motorWheel.search();
+//   }
+// }
