@@ -22,6 +22,10 @@ public:
   void edgePrevention();
 
 private:
+  
+  // Clean Code
+  void setAllWheelsSpeed(int speed);
+  
   AF_DCMotor frontLeftWheel;
   AF_DCMotor frontRightWheel;
   AF_DCMotor backLeftWheel;
