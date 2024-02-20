@@ -1,10 +1,31 @@
 #ifndef IR_CONTROL_H
 #define IR_CONTROL_H
 
-void checkEdge(int leftIRSensor, int rightIRSensor, int distance); // Dagdagan nalang kung apat na IR sensor need
-void handleBothIRHIGH(int distance);
-void handleBothIRLOW();
-void handleLeftIRHighRightIRLow();
-void handleLeftIRLowRightIRHigh();
+#include "MotorControl.h" // Include MotorControl to have access in MotorControl functions
+#include <Arduino.h>
+
+class IRControl {
+    public:
+        IRControl(int frontLeftIRPin, int frontRightIRPin, int backIRPin, MotorControl& motorControl);
+
+        // Function read sensors
+        void readSensors();
+
+        // Function to make decision based on readings
+        void makeDecisions(int distance);
+
+    private:
+        // For Pin
+        int frontLeftIRPin;
+        int frontRightIRPin;
+        int backIRPin;
+
+        // Store Reading Value
+        int frontLeftIRValue;
+        int frontRightIRValue;
+        int backIRValue;
+        
+        MotorControl& motorControl; // Reference to MotorControl
+};
 
 #endif

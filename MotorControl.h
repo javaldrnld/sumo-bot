@@ -5,7 +5,7 @@
 
 class MotorControl {
 public:
-  MotorControl(int frontLeftWheelPin, int frontRightWheelPin, int backLeftWheelPin, int backRightWheelPin);
+  MotorControl(int frontLeftWheelPin, int backLeftWheelPin, int frontRightWheelPin, int backRightWheelPin);
  
   // Basic Movements
   void goForward();
@@ -17,7 +17,7 @@ public:
   void rotate();
  
   // Basic Operation
-  void search();
+  int search();
   void attack();
   void edgePrevention();
 
@@ -27,8 +27,8 @@ private:
   void setAllWheelsSpeed(int speed);
   
   AF_DCMotor frontLeftWheel;
-  AF_DCMotor frontRightWheel;
   AF_DCMotor backLeftWheel;
+  AF_DCMotor frontRightWheel;
   AF_DCMotor backRightWheel;
 };
 

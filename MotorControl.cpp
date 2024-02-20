@@ -1,12 +1,17 @@
+#include <AFMotor.h>
 #include "MotorControl.h"
-#include <cstdlib>  // for rand() and srand()
-#include <ctime>    // for time()
+#include <time.h>    // for time()
+#include <stdlib.h>  // for rand() and srand()
+#include <stdio.h>
+#include <Arduino.h>
 
 // Constant Speed
 const int SPEED = 200;
+unsigned long prevMillis = 0;
+const long interval = 1000; // Can change
 
-MotorControl::MotorControl(int frontLeftWheelPin, int frontRightWheelPin, int backLeftWheelPin, int backRightWheelPin) 
-    : frontLeftWheel(frontLeftWheelPin), frontRightWheel(frontRightWheelPin), backLeftWheel(backLeftWheelPin), backRightWheel(backRightWheelPin){
+MotorControl::MotorControl(int frontLeftWheelPin, int backLeftWheelPin, int frontRightWheelPin, int backRightWheelPin) 
+    : frontLeftWheel(frontLeftWheelPin), backLeftWheel(backLeftWheelPin), frontRightWheel(frontRightWheelPin), backRightWheel(backRightWheelPin){
     frontLeftWheel.run(RELEASE);
     frontRightWheel.run(RELEASE);
     backLeftWheel.run(RELEASE);
@@ -14,6 +19,7 @@ MotorControl::MotorControl(int frontLeftWheelPin, int frontRightWheelPin, int ba
 
     // Initalize random seed
     srand(time(0));
+
 }
 
 void MotorControl::setAllWheelsSpeed(int speed) {
@@ -25,10 +31,10 @@ void MotorControl::setAllWheelsSpeed(int speed) {
 
 void MotorControl::goForward() {
     setAllWheelsSpeed(SPEED);
-    frontRightWheel.run(FORWARD);
-    frontLeftWheel.run(FORWARD);
-    backLeftWheel.run(FORWARD);
-    backRightWheel.run(FORWARD);
+    frontRightWheel.run(FORWARD); // Back right wheel umaandar
+    frontLeftWheel.run(FORWARD); // Goods
+    backLeftWheel.run(FORWARD); // Goods
+    backRightWheel.run(FORWARD); // front right  umaandar
 }
 
 void MotorControl::goBackward() {
@@ -42,21 +48,28 @@ void MotorControl::goBackward() {
 
 // need to trial and error
 void MotorControl::turnRight() {
-    setAllWheelsSpeed(SPEED);
+    frontLeftWheel.setSpeed(250);
+    frontRightWheel.setSpeed(250/2);
+    backLeftWheel.setSpeed(250);
+    backRightWheel.setSpeed(250/2);
     
-    frontRightWheel.run(FORWARD);
-    frontLeftWheel.run(BACKWARD);
+    frontRightWheel.run(BACKWARD); // Back Right Wheel
+    frontLeftWheel.run(FORWARD);
     backLeftWheel.run(FORWARD);
-    backRightWheel.run(BACKWARD);
+    backRightWheel.run(BACKWARD); // Front Right 
 }
 
 void MotorControl::turnLeft() {
-    setAllWheelsSpeed(SPEED);
+    // setAllWheelsSpeed(SPEED);
+    frontLeftWheel.setSpeed(250/2); 
+    frontRightWheel.setSpeed(250); // -> Back right
+    backLeftWheel.setSpeed(250/2);
+    backRightWheel.setSpeed(250); // front right  umaandar 
 
-    frontRightWheel.run(BACKWARD);
-    frontLeftWheel.run(FORWARD);
+    frontRightWheel.run(FORWARD); // Back Rright
+    frontLeftWheel.run(BACKWARD);
     backLeftWheel.run(BACKWARD);
-    backRightWheel.run(FORWARD);
+    backRightWheel.run(FORWARD); // front right  umaandar
 }
 
 void MotorControl::rotate() {
@@ -71,7 +84,13 @@ void MotorControl::rotate() {
 void MotorControl::charge() {
     // What does this-> do? -> It is a pointer to the object itself
     // So I don't need MotorControl::goForward()? -> Yes, you don't need it
-    this->goForward();
+    // this->goForward();
+    setAllWheelsSpeed(250);
+
+    frontRightWheel.run(FORWARD); // Back right wheel umaandar
+    frontLeftWheel.run(FORWARD); // Goods
+    backLeftWheel.run(FORWARD); // Goods
+    backRightWheel.run(FORWARD); // front right  umaandar
 }
 
 void MotorControl::stop() {
@@ -81,25 +100,37 @@ void MotorControl::stop() {
     backRightWheel.run(RELEASE);
 }
 
-void MotorControl::search() {
+int MotorControl::search() {
+    unsigned long currentMillis = millis();
+    static int i = 0;
     // Generate random number 0 or 1
     int random = rand() % 2;
-
     // If random is 0, turn clockwise
     if (random == 0) {
-        setAllWheelsSpeed(SPEED);
+      // Non-blocking
+      if (currentMillis - prevMillis >= interval) {
+        prevMillis = currentMillis;
 
-        frontRightWheel.run(BACKWARD);
-        frontLeftWheel.run(FORWARD);
-        backLeftWheel.run(FORWARD);
-        backRightWheel.run(BACKWARD);
+        if (i < 5) {
+          this->turnRight();
+          i++;
+        }
+      }
+
     } else {
         // If random is 1, turn counter clockwise
-        setAllWheelsSpeed(SPEED);
+        // Nonblocking
+        if (currentMillis - prevMillis >= interval) {
+          prevMillis = currentMillis;
 
-        frontRightWheel.run(FORWARD);
-        frontLeftWheel.run(BACKWARD);
-        backLeftWheel.run(BACKWARD);
-        backRightWheel.run(FORWARD);
+          if (i < 5) {
+            this->turnLeft();
+            i++;
+          }
+        
+        }
+
+
+
     }
 }
